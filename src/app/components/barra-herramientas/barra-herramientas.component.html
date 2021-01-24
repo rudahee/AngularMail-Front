@@ -1,0 +1,26 @@
+<mat-toolbar>
+  <mat-toolbar-row>
+    <button mat-icon-button id="logo" (click)="navegarHaciaPrincipal()">
+      <mat-icon>email</mat-icon><span id="titulo">AngularMail</span>
+    </button>
+
+    <span class="spacer"></span>
+
+    <ng-container>
+      <button mat-button [matMenuTriggerFor]="menu" matToolTip="Usuario">
+        <mat-icon>account_circle</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item (click)="navegarHaciaDatosPersonales()">
+          <mat-icon>account_circle</mat-icon>Modificar mis datos
+        </button>
+        <button mat-menu-item (click)="navegarHaciaCambiarPassword()">
+          <mat-icon>vpn_key</mat-icon>Modificar contraseña
+        </button>
+        <button mat-menu-item (click)="ConfirmarCierreSesion()">
+          <mat-icon>exit_to_app</mat-icon>Abandonar la sesion
+        </button>
+      </mat-menu>
+    </ng-container>
+  </mat-toolbar-row>
+</mat-toolbar>
