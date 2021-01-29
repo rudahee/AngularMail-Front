@@ -3,6 +3,8 @@ import { ComunicacionAlertasService } from 'src/app/services/comunicacion-alerta
 import { DialogoTypes } from 'src/app/components/dialogo-general/dialogo-data-type';
 import { AutenticadorJwtService } from 'src/app/services/autenticador-jwt.service';
 import { Router } from '@angular/router';
+import { UsuarioService } from 'src/app/services/usuario.service';
+import { Usuario } from 'src/app/interfaces/interfaces';
 
 @Component({
   selector: 'app-barra-herramientas',
@@ -11,33 +13,54 @@ import { Router } from '@angular/router';
 })
 export class BarraHerramientasComponent implements OnInit {
 
-  constructor(private alertas:ComunicacionAlertasService,
-    private autenticacion: AutenticadorJwtService,
-    private router: Router) { }
+  usuarioAutenticado: Usuario; // Guardo el usuario autenticado
 
-  ngOnInit(): void {
+  // Necesito varios objetos inyectados en este componente
+  constructor(private comunicacionAlertasService: ComunicacionAlertasService,
+    private autenticacionPorJWT: AutenticadorJwtService,
+    private router: Router,
+    private usuariosService: UsuarioService) { }
+
+
+  ngOnInit () {
+    this.usuariosService.cambiosEnUsuarioAutenticado.subscribe(nuevoUsuarioAutenticado => {
+      this.usuarioAutenticado = nuevoUsuarioAutenticado;
+    });
   }
 
+  /**
+   * El logo de la barra de herramientas nos llevará al listado de mensajes
+   */
   navegarHaciaPrincipal() {
     this.router.navigate(['/listadoMensajes']);
   }
 
-  ConfirmarCierreSesion() {
-    this.alertas.abrirDialogConfirmacion('¿Desea cerrar la sesion?').subscribe(
-      opcion => {
-        if (opcion == DialogoTypes.RESPUESTA_ACEPTAR) {
-          this.autenticacion.eliminarJWT();
-          this.router.navigate(['/login']);
-        }
+  /**
+   * Confirmación de que deseamos abandonar la sesión
+   */
+  confirmacionAbandonarSesion() {
+    this.comunicacionAlertasService.abrirDialogConfirmacion ('¿Realmente desea abandonar la sesión?').subscribe(opcionElegida => {
+      if (opcionElegida == DialogoTypes.RESPUESTA_ACEPTAR) {
+        this.autenticacionPorJWT.eliminarJWT();
+        this.usuarioAutenticado = null;
+        this.router.navigate(['/login']);
       }
-    )
-  };
-
-  navegarHaciaDatosPersonales() {
-
+    });
   }
 
-  navegarHaciaCambiarPassword() {
-
+  /**
+   * Navegar hacia el componente de cambiar password
+   */
+  navegarHaciaCambiaPassword () {
+    this.router.navigate(['/password']);
   }
+
+
+  /**
+   * Navegar hacia el componente de modificación de los datos del usuario
+   */
+  navegarHaciaDatosPersonales () {
+    this.router.navigate(['/datosUsuario']);
+  }
+
 }

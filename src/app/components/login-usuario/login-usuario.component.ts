@@ -20,8 +20,8 @@ export class LoginUsuarioComponent implements OnInit {
 
   ngOnInit(): void {
     this.loginForm = new FormGroup( {
-      usuario: new FormControl('',[Validators.required, Validators.minLength(4)]),
-      password: new FormControl('', [Validators.required])
+      usuario: new FormControl('pedro',[Validators.required, Validators.minLength(4)]),
+      password: new FormControl('1234', [Validators.required])
     })
   }
 
@@ -35,10 +35,10 @@ export class LoginUsuarioComponent implements OnInit {
           this.autenticadorJwtService.almacenaJWT(data.jwt);
           this.router.navigate(['/listadoMensajes']);
           this.alertas.cerrarDialogo()
+          this.usuarioService.emitirNuevoCambioEnUsuarioAutenticado();
         } else {
           this.alertas.abrirDialogError("Datos incorrectos")
         }
-        console.log(data.jwt)
       });
   }
 

@@ -3,6 +3,7 @@ import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { DialogoGeneralComponent } from '../components/dialogo-general/dialogo-general.component';
 import { DialogoTypes } from '../components/dialogo-general/dialogo-data-type';
 import { Observable } from 'rxjs';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,7 @@ export class ComunicacionAlertasService {
 
  dialogConfig = new MatDialogConfig();
 
-  constructor(private dialog: MatDialog) {
+  constructor(private dialog: MatDialog, private snackBar: MatSnackBar) {
     this.dialogConfig.disableClose = true;
     this.dialogConfig.autoFocus = true;
    }
@@ -54,6 +55,14 @@ export class ComunicacionAlertasService {
     const dialogRef = this.dialog.open(DialogoGeneralComponent, this.dialogConfig);
 
     return dialogRef.afterClosed();
+  }
+
+  mostrarSnackBar(mensajeAMostrar: string) {
+    this.snackBar.open(mensajeAMostrar, null, {
+      duration: 2000,
+      horizontalPosition: 'center',
+      verticalPosition: 'top',
+    });
   }
 
   cerrarDialogo() {
