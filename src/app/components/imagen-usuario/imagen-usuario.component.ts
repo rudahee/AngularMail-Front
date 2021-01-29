@@ -8,16 +8,11 @@ import { Usuario } from '../../interfaces/interfaces';
 })
 export class ImagenUsuarioComponent  {
 
-  // Las propiedades con el decorador Input son propiedades que pueden personalizar
-  // este componente, desde fuera del mismo. Son propiedades que "entran" en él.
+
   @Input('usuario') usuario: Usuario;
   @Input('width') width: number;
   @Input('height') height: number;
 
-
   constructor() {
   }
-
-
-
 }
